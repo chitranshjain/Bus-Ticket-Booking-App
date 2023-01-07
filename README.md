@@ -1,92 +1,743 @@
-# Bus Ticket Booking Application
+# Authentication
 
+## Login
 
+User can login using this endpoint by entering their credentials and get back a JWT token
 
-## Getting started
+### Request
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/sde-bootcamp/Bus-Ticket-Booking-Application.git
-git branch -M main
-git push -uf origin main
+```javascript
+POST /api/user/login
+{
+    data: {
+        email: String,
+        password: String
+    }
+}
 ```
 
-## Integrate with your tools
+### Response
 
-- [ ] [Set up project integrations](https://gitlab.com/sde-bootcamp/Bus-Ticket-Booking-Application/-/settings/integrations)
+#### Success
 
-## Collaborate with your team
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        token: String
+    }
+}
+```
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+#### Error
 
-## Test and Deploy
+```javascript
+{
+    status: Number {400 || 404 || 422 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
 
-Use the built-in continuous integration in GitLab.
+## Register
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+User can register using this endpoint by entering their information and get back a JWT token
 
-***
+### Request
 
-# Editing this README
+```javascript
+POST /api/user/register
+{
+    data: {
+        name: String
+        email: String,
+        phoneNo: String,
+        password: String,
+    }
+}
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### Response
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+#### Success
 
-## Name
-Choose a self-explaining name for your project.
+```javascript
+{
+    status: 201,
+    data: {
+        message: String,
+        token: String
+    }
+}
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+#### Error
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```javascript
+{
+    status: Number {422 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+# User
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## Get Current (Logged In) User's Profile
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Send logged in user's JWT token to get their profile details
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+### Request
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```javascript
+GET /api/user
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### Response
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+#### Success
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        user: Object
+    }
+}
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+#### Error
 
-## License
-For open source projects, say how it is licensed.
+```javascript
+{
+    status: Number {404 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Get Current User's Bookings
+
+Get all the bookings of the currently logged in user
+
+### Request
+
+```javascript
+GET /api/user/bookings
+{
+    headers: {
+        Authorization: `Bearer ${token}`,
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        bookings: Object[]
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {404 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+# Booking
+
+## Create A Booking
+
+Create a new booking
+
+### Request
+
+```javascript
+POST /api/bookings/
+{
+    headers: {
+        Authorization: `Bearer ${token}`,
+    }
+    data: {
+        busId: String,
+        bookingDate: Date,
+        status: String,
+        source: String,
+        destination: String,
+        seatNo: Number,
+        amount: Number,
+        transactionID: String // OPTIONAL : It will store the transaction ID of the payment gateway
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 201,
+    data: {
+        message: String,
+        booking: Object[]
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {404 || 422 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Cancel A Booking
+
+Cancel a previous but not completed booking
+
+### Request
+
+```javascript
+PATCH /api/bookings/cancel/:bookingId
+{
+    headers: {
+        Authorization: `Bearer ${token}`,
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {404 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Mark Booking As Completed
+
+Mark a booking as completed
+
+### Request
+
+```javascript
+PATCH /api/admin/bookings/complete/:bookingId
+{
+    headers: {
+        Authorization: `Bearer ${token}`,
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {401 || 404 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Get All Upcoming Bookings
+
+Get all bookings that are yet to begin
+
+### Request
+
+```javascript
+{
+    GET /api/admin/bookings/upcoming
+    {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        upcomingBookings: Object[]
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {401 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Get All Completed Bookings
+
+Get all bookings that are completed
+
+### Request
+
+```javascript
+{
+    GET /api/admin/bookings/completed
+    {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        completedBookings: Object[]
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {401 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Get All Cancelled Bookings
+
+Get all bookings that have been cancelled
+
+### Request
+
+```javascript
+{
+    GET /api/admin/bookings/cancelled
+    {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        cancelledBookings: Object[]
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {402|| 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Get All Bookings For A Bus
+
+Get all bookings for a specific bus
+
+### Request
+
+```javascript
+{
+    GET /api/admin/bookings/bus/:busId
+    {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        bookings: Object[]
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {402 || 404 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+# Coupons
+
+## Create A Coupon
+
+Create a new coupon
+
+### Request
+
+```javascript
+POST /api/admin/coupons
+    headers: {
+        Authorization: `Bearer ${token}`
+    },
+    data: {
+        discountPercentage: Number,
+        validBefore: Date,
+        couponName: String,
+    }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 201,
+    data: {
+        message: String,
+        coupon: Object
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {402 || 422 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Delete A Coupon
+
+Delete a coupon
+
+### Request
+
+```javascript
+DELETE /api/admin/coupons/:couponId
+{
+    headers: {
+        Authorization: `Bearer ${token}`
+    },
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {402 || 404|| 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Get All Valid Coupons
+
+Get all valid coupons
+
+### Request
+
+```javascript
+{
+  GET /api/coupons/
+  headers: {
+    Authorization: `Bearer ${token}`;
+  }
+}
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        coupons: Object[]
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {402 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+# Bus
+
+## Add A Bus
+
+Add a new bus
+
+### Request
+
+```javascript
+POST /api/admin/bus
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+        name: String,
+        busType: String,
+        cities: [{
+            cityName: String,
+            departureTime: Date
+        }],
+        numberOfSeats: Number,
+        dateOfTravel: Date
+    }
+  };
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 201,
+    data: {
+        message: String,
+        bus: Object
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {402 || 422 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Remove A Bus
+
+Remove a bus
+
+### Request
+
+```javascript
+DELETE /api/admin/bus/:busId
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {402 || 404 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
+
+## Get Available Buses
+
+Get all available buses for a journey
+
+### Request
+
+```javascript
+GET /api/bus
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+        sourceCity: String,
+        destinationCity: String,
+        dateOfTravel: Date
+    }
+  };
+```
+
+### Response
+
+#### Success
+
+```javascript
+{
+    status: 200,
+    data: {
+        message: String,
+        buses: Object[]
+    }
+}
+```
+
+#### Error
+
+```javascript
+{
+    status: Number {404 || 422 || 500},
+    data: {
+        message: String,
+        error: Object
+    }
+}
+```
